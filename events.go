@@ -47,6 +47,9 @@ func (l *Logger) Log(typ string, event interface{}) error {
 func (l *Logger) Iter(typ string, fn func(decodeFn func(interface{}) error) error) error {
 	return l.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(typ))
+		if b == nil {
+			return nil
+		}
 		c := b.Cursor()
 
 		var buf bytes.Buffer
